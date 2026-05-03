@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tom's Diner</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --cream: #f7f4f0;
+      --ink: #1a1612;
+      --sepia: #8b6f47;
+      --muted: #a89880;
+      --ua: #2e5c8a;
+    }
+
+    body {
+      background-color: var(--cream);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 60px 20px 80px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      margin: 18px auto 0;
+      width: 60px;
+      height: 1px;
+      background: var(--sepia);
+    }
+
+    .stanza {
+      margin-bottom: 40px;
+    }
+
+    .line-pair {
+      margin-bottom: 2px;
+    }
+
+    .en {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.08rem;
+      font-weight: 400;
+      line-height: 1.9;
+      color: var(--ink);
+      text-align: center;
+      display: block;
+    }
+
+    .ua {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--ua);
+      text-align: center;
+      display: block;
+      margin-bottom: 14px;
+      letter-spacing: 0.015em;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .mode-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 40px;
+    }
+
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      border-radius: 999px;
+      border: 1.5px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    #btn-en .dot { background: var(--ink); }
+    #btn-en .label {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+    #btn-en.active {
+      border-color: var(--ink);
+      background: rgba(26,22,18,0.05);
+    }
+    #btn-en:not(.active) { opacity: 0.38; }
+    #btn-en:not(.active):hover { opacity: 0.7; }
+
+    #btn-ua .dot { background: var(--ua); }
+    #btn-ua .label {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--ua);
+    }
+    #btn-ua.active {
+      border-color: var(--ua);
+      background: rgba(46,92,138,0.07);
+    }
+    #btn-ua:not(.active) { opacity: 0.38; }
+    #btn-ua:not(.active):hover { opacity: 0.7; }
+
+    body.mode-en .ua { display: none; }
+    body.mode-en .en { line-height: 2.1; }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      margin-bottom: 32px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .highlight-error {
+  background-color: #fff3cd; /* light yellow, common for warnings/errors */
+  color: #856404;            /* dark brownish-yellow for contrast */
+  padding: 0.1em 0.3em;      /* slight padding so the highlight extends around text */
+  border-radius: 0.2em;      /* subtle rounded corners */
+}
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="title">Tom's Diner</div>
+      <div class="subtitle">Suzanne Vega &nbsp;·&nbsp; 1987</div>
+      <div class="divider"></div>
+    </header>
+
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/mto47BMT3yA"
+        title="Tom's Diner – Suzanne Vega"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="mode-toggle">
+      <button id="btn-en" class="mode-btn" onclick="setMode('en')">
+        <span class="dot"></span>
+        <span class="label">English</span>
+      </button>
+      <button id="btn-ua" class="mode-btn active" onclick="setMode('ua')">
+        <span class="dot"></span>
+        <span class="label">Українська</span>
+      </button>
+    </div>
+
+    <script>
+      function setMode(mode) {
+        document.body.classList.toggle('mode-en', mode === 'en');
+        document.getElementById('btn-en').classList.toggle('active', mode === 'en');
+        document.getElementById('btn-ua').classList.toggle('active', mode === 'ua');
+      }
+    </script>
+
+    <!-- Stanza 1 -->
+    <div class="stanza">
+      <div class="line-pair">
+        <span class="en">I am sitting in the morning</span>
+        <span class="ua">Я сиджу вранці</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">At the diner on the corner</span>
+        <span class="ua">У кафе на розі</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">I am waiting at the counter</span>
+        <span class="ua">Я чекаю біля стійки</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">For the man to pour the coffee</span>
+        <span class="ua">Поки чоловік наллє каву</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And he fills it only halfway</span>
+        <span class="ua">А він наповнює її лише наполовину</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And before I even argue</span>
+        <span class="ua">І перш ніж я встигаю заперечити</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">He is looking out the window</span>
+        <span class="ua">Він уже дивиться у вікно</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">At somebody coming in</span>
+        <span class="ua">На когось, хто входить</span>
+      </div>
+    </div>
+
+    <!-- Stanza 2 -->
+    <div class="stanza">
+      <div class="line-pair">
+        <span class="en">"It is always nice to see you"</span>
+        <span class="ua">«Завжди приємно вас бачити»</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">Says the man behind the counter</span>
+        <span class="ua">Каже чоловік із-за стійки</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">To the woman who has come in</span>
+        <span class="ua">Жінці, яка щойно увійшла</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">She is shaking her umbrella</span>
+        <span class="ua">Вона струшує свою парасольку</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And I look the other way</span>
+        <span class="ua">А я відвертаюся</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">As they are kissing their hellos</span>
+        <span class="ua">Поки вони вітаються поцілунком</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And I'm pretending not to see them</span>
+        <span class="ua">І вдаю, що не помічаю їх</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And instead I pour the milk</span>
+        <span class="ua">А натомість доливаю молоко</span>
+      </div>
+    </div>
+
+    <!-- Stanza 3 -->
+    <div class="stanza">
+      <div class="line-pair">
+        <span class="en">I open up the paper</span>
+        <span class="ua">Я розгортаю газету</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">There's a story of an actor</span>
+        <span class="ua">Там — замітка про актора</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">Who had died while he was drinking</span>
+        <span class="ua">Який помер за чаркою</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">It was no one I had heard of</span>
+        <span class="ua">Ніхто мені не знайомий</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And I'm turning to the horoscope</span>
+        <span class="ua">І я гортаю до гороскопу</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And looking for the <span class="highlight-error"> funnies </span></span>
+        <span class="ua">Шукаю приколи</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">When I'm feeling someone watching me</span>
+        <span class="ua">Коли відчуваю чийсь погляд</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And so I raise my head</span>
+        <span class="ua">І піднімаю голову</span>
+      </div>
+    </div>
+
+    <!-- Stanza 4 -->
+    <div class="stanza">
+      <div class="line-pair">
+        <span class="en">There's a woman on the outside</span>
+        <span class="ua">За вікном стоїть жінка</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">Looking inside, does she see me?</span>
+        <span class="ua">Дивиться всередину — чи бачить вона мене?</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">No, she does not really see me</span>
+        <span class="ua">Ні, вона насправді мене не бачить</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">'Cause she sees her own reflection</span>
+        <span class="ua">Бо бачить лише своє відображення</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And I'm trying not to notice</span>
+        <span class="ua">І я намагаюся не дивитися</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">That she's <span class="highlight-error">hitching up</span> her skirt</span>
+        <span class="ua">Як вона підсмикує/підтягує спідницю</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And while she's straightening her stockings</span>
+        <span class="ua">І поки вона підтягує панчохи</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">Her hair has gotten wet</span>
+        <span class="ua">Її волосся вже намокло</span>
+      </div>
+    </div>
+
+    <!-- Stanza 5 -->
+    <div class="stanza">
+      <div class="line-pair">
+        <span class="en">Oh, this rain, it will continue</span>
+        <span class="ua">О, цей дощ, він і далі йтиме/триватиме</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">Through the morning as I'm listening</span>
+        <span class="ua">Крізь усі ранкові години, поки я слухаю</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">To the bells of the cathedral</span>
+        <span class="ua">Дзвони собору</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">I am thinking of your voice</span>
+        <span class="ua">Я думаю про твій голос</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And of the midnight picnic once upon a time</span>
+        <span class="ua">І про нічний пікнік колись давно</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">Before the rain began...</span>
+        <span class="ua">До того, як пішов дощ…</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And I finish up my coffee</span>
+        <span class="ua">Я допиваю каву</span>
+      </div>
+      <div class="line-pair">
+        <span class="en">And it's time to catch the train</span>
+        <span class="ua">І час іти на потяг</span>
+      </div>
+    </div>
+
+    <footer>
+      Suzanne Vega &nbsp;·&nbsp; Solitude Standing, 1987
+    </footer>
+  </div>
+</body>
+</html>
